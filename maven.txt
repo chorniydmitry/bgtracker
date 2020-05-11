@@ -1,0 +1,2 @@
+cd C:\Users\Катюша\eclipse-workspace\hsbgtracker
+C:\opt\apache-maven-3.6.3\bin\mvn clean compile assembly:single

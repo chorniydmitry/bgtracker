@@ -1,0 +1,16 @@
+chernyj\hsbgtracker\swing\ResultsFrame.class
+chernyj\hsbgtracker\swing\ResultsController.class
+chernyj\hsbgtracker\model\Player.class
+chernyj\hsbgtracker\model\BattlegroundsGame$State.class
+chernyj\hsbgtracker\model\BattlegroundsGame$1.class
+chernyj\hsbgtracker\model\Minion.class
+chernyj\hsbgtracker\utils\ApplicationConfiguration.class
+chernyj\hsbgtracker\swing\MainController.class
+hsbgtracker\App.class
+chernyj\hsbgtracker\model\BattlegroundsGame.class
+chernyj\hsbgtracker\utils\LogFileUtils.class
+chernyj\hsbgtracker\utils\LogFileReader.class
+chernyj\hsbgtracker\utils\ApplicationConfiguration$AppConfigHolder.class
+chernyj\hsbgtracker\utils\Constants.class
+chernyj\hsbgtracker\utils\observers\LogFileObserver.class
+chernyj\hsbgtracker\utils\subjects\LogFileSubject.class
