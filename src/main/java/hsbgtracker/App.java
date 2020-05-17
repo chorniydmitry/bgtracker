@@ -62,6 +62,9 @@ public class App {
 		heroes.add(new Hero(61488,"TB_BaconShop_HERO_56",40,"Алекстраза"));
 		heroes.add(new Hero(61489,"TB_BaconShop_HERO_57",40,"Ноздорму"));
 		heroes.add(new Hero(61490,"TB_BaconShop_HERO_58",40,"Малигос"));
+		heroes.add(new Hero(61912,"TB_BaconShop_HERO_60",40,"Принц Кель'тас"));
+		heroes.add(new Hero(61913,"TB_BaconShop_HERO_61",40,"Леди Вайш"));
+		heroes.add(new Hero(61914,"TB_BaconShop_HERO_62",40,"Майев Песнь Теней"));
 		
 		HeroService service = new HeroService();
 		
@@ -69,7 +72,7 @@ public class App {
 	}
 
 	public static void main(String[] args) {
-		//addHeroesToDB();
+		addHeroesToDB();
 		
 		new MainController(new Tray());
 		

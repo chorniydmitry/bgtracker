@@ -213,10 +213,9 @@ public class LogFileReader implements Runnable, LogFileSubject {
 		Map<String, String> resultSet = new HashMap<>();
 		while (playerName == null || playerId == null || playerBTag == null || playerHero == null) {
 			String line = reader.readLine();
-			if(line == null) {
-				System.out.println("SOMETHING WRONG...");
+			if(line == null)
 				continue;
-			}
+			
 			if (line.contains("PlayerID=") && line.contains("PlayerName=") && line.contains("#")) {
 				playerName = line.split("PlayerName=")[1].split("#")[0];
 				playerId = line.split("PlayerID=")[1].split(",")[0];
