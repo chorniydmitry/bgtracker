@@ -21,6 +21,7 @@
 		<mapping class="chernyj.hsbgtracker.entity.Game"></mapping>
 		<mapping class="chernyj.hsbgtracker.entity.Hero"></mapping>
 		<mapping class="chernyj.hsbgtracker.entity.User"></mapping>
+		<mapping class="chernyj.hsbgtracker.entity.Result"></mapping>
 
 	</session-factory>
 </hibernate-configuration>

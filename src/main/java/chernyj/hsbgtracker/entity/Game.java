@@ -20,7 +20,7 @@ public class Game extends Model {
 	@Column(name = "timeFinished")
 	private Date timeFinished;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="result", fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="game", fetch = FetchType.EAGER)
 	private Set<Result> results;
 	
 	

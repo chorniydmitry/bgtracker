@@ -34,105 +34,107 @@ public class BattlegroundsAnalyser implements LogFileObserver {
 		Player mainPlayer = getMainPlayer();
 
 		System.out.println(mainPlayer == null);
-		System.out.println("GAME FINISHED at: " + timeFinished + " . YOR FINAL PLACE IS: " + mainPlayer.getPlace() + " YOUR HERO IS: "
-				+ mainPlayer.getHero());
+		System.out.println("GAME FINISHED at: " + timeFinished + " . YOR FINAL PLACE IS: " + mainPlayer.getPlace()
+				+ " YOUR HERO IS: " + mainPlayer.getHero());
 
 		// resultsController.addNewResult(mainPlayer.getHero().getHsId(),
 		// mainPlayer.getPlace());
 
 		Set<Result> results = new HashSet<>();
 		results.addAll(getMainPlayerResult());
-		results.addAll(saveOtherDeadPlayersResultsToDB());
-		
+		results.addAll(getOtherDeadPlayersResults());
+
 		saveGame(results);
-		
+
 		resultsController.showResult(mainPlayer);
 	}
-	
+
 	private void saveGame(Set<Result> results) {
 		GameService gameService = new GameService();
-		
+
 		Game game = new Game();
 		game.setTimeStarted(timeStarted);
 		game.setTimeFinished(timeFinished);
 		game.setResults(results);
-		
-		if(!gameService.exists(game)) {
+
+		results.forEach(r -> r.setGame(game));
+
+		System.out.println(game.getResults().size());
+
+		if (!gameService.exists(game)) {
 			gameService.save(game);
+		} else {
+			System.out.println("Game already saved nothing to do...");
 		}
 
 	}
-	
+
 	private Set<Result> getMainPlayerResult() {
 		Player mainPlayer = getMainPlayer();
 		Hero mainPlayerHero = mainPlayer.getHero();
 		int mainPlayerPlace = mainPlayer.getPlace();
-		
-		
+
 		Result result = new Result(convertToDBUser(mainPlayer), mainPlayerHero, mainPlayerPlace);
-		
+
 		Set<Result> results = new HashSet<>();
 		results.add(result);
-		
+
 //		if(game == null) {
 //			saveUserResultsToDB(mainPlayerHero, convertToDBUser(mainPlayer), mainPlayerPlace);
 //			
 //		}
-		
+
 		return results;
 	}
-	
-	
+
 //	private void saveUserResultsToDB(Hero hero, User user, int place) {
 //		ResultService resultService = new ResultService();
 //		Result result = new Result(user, hero, place);
 //		if(!resultService.exists(result))
 //			resultService.save(result);
 //	}
-	
-	private Set<Result> saveOtherDeadPlayersResultsToDB() {
+
+	private Set<Result> getOtherDeadPlayersResults() {
 		UserService service = new UserService();
-		User otherPlayer = service.getByNameAndBTag("Other Player", 0);
-		
+		User otherPlayer = service.getByNameAndBTag("Other player", 0);
+
 		int mainPlayerPlace = getMainPlayer().getPlace();
-		
+
 		Set<Result> results = new HashSet<Result>();
-		
+
 		for (Player player : playersList) {
-			if((player.getPlace() < mainPlayerPlace && mainPlayerPlace != 2) || player.isMainPlayer())
+			if ((player.getPlace() < mainPlayerPlace && mainPlayerPlace != 2) || player.isMainPlayer())
 				continue;
 //			saveUserResultsToDB(player.getHero(), otherPlayer, player.getPlace());
-			
+
 			Result result = new Result(otherPlayer, player.getHero(), player.getPlace());
 			results.add(result);
-			
+
 		}
-		
+
 		return results;
 	}
-	
+
 	private User convertToDBUser(Player player) {
 		String name = player.getName();
 		int bTag = Integer.parseInt(player.getbTag());
-		
-		if(bTag == 0)
+
+		if (bTag == 0)
 			name = "Other Player";
 
 		UserService service = new UserService();
 		service.getByNameAndBTag(name, bTag);
 
-		if (name.isEmpty() && bTag == 0) 
+		if (name.isEmpty() && bTag == 0)
 			return null;
-		else { 
+		else {
 			User user = service.getByNameAndBTag(name, bTag);
-			if(user == null) {
+			if (user == null) {
 				user = new User(name, bTag);
 			}
 			return user;
 		}
 	}
-	
-
 
 	private void setMainPlayer(Map<String, String> data) {
 		Player player = new Player();
@@ -165,9 +167,9 @@ public class BattlegroundsAnalyser implements LogFileObserver {
 		HeroService service = new HeroService();
 		Hero hero = service.getByHsId(data.get("playerHeroId"));
 		player.setHero(hero);
-		
-		//System.out.println(data.get("playerHeroId"));
-		//System.out.println(player);
+
+		// System.out.println(data.get("playerHeroId"));
+		// System.out.println(player);
 
 		playersList.add(player);
 	}
@@ -190,7 +192,7 @@ public class BattlegroundsAnalyser implements LogFileObserver {
 		String dateStr = data.get("startedTime");
 		this.timeStarted = DateConverter.convert(dateStr);
 	}
-	
+
 	private void setGameFinishedTime(Map<String, String> data) {
 		String dateStr = data.get("finishedTime");
 		this.timeFinished = DateConverter.convert(dateStr);
