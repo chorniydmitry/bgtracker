@@ -2,10 +2,13 @@ package chernyj.hsbgtracker.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import chernyj.hsbgtracker.entity.Game;
 import chernyj.hsbgtracker.entity.Hero;
+import chernyj.hsbgtracker.entity.Result;
 import chernyj.hsbgtracker.entity.User;
 import chernyj.hsbgtracker.service.GameService;
 import chernyj.hsbgtracker.service.HeroService;
@@ -37,44 +40,75 @@ public class BattlegroundsAnalyser implements LogFileObserver {
 		// resultsController.addNewResult(mainPlayer.getHero().getHsId(),
 		// mainPlayer.getPlace());
 
-		saveResult();
-		saveOtherDeadPlayersResultsToDB();
+		Set<Result> results = new HashSet<>();
+		results.addAll(getMainPlayerResult());
+		results.addAll(saveOtherDeadPlayersResultsToDB());
+		
+		saveGame(results);
+		
 		resultsController.showResult(mainPlayer);
 	}
 	
-	private void saveResult() {
+	private void saveGame(Set<Result> results) {
+		GameService gameService = new GameService();
+		
+		Game game = new Game();
+		game.setTimeStarted(timeStarted);
+		game.setTimeFinished(timeFinished);
+		game.setResults(results);
+		
+		if(!gameService.exists(game)) {
+			gameService.save(game);
+		}
+
+	}
+	
+	private Set<Result> getMainPlayerResult() {
 		Player mainPlayer = getMainPlayer();
 		Hero mainPlayerHero = mainPlayer.getHero();
 		int mainPlayerPlace = mainPlayer.getPlace();
 		
-		GameService gameService = new GameService();
 		
-		Game game = null;
+		Result result = new Result(convertToDBUser(mainPlayer), mainPlayerHero, mainPlayerPlace);
 		
-		if(game == null) {
-			saveUserResultsToDB(mainPlayerHero, convertToDBUser(mainPlayer), mainPlayerPlace, timeStarted, timeFinished);
-		}
+		Set<Result> results = new HashSet<>();
+		results.add(result);
+		
+//		if(game == null) {
+//			saveUserResultsToDB(mainPlayerHero, convertToDBUser(mainPlayer), mainPlayerPlace);
+//			
+//		}
+		
+		return results;
 	}
 	
 	
-	private void saveUserResultsToDB(Hero hero, User user, int place, Date dateStarted, Date dateFinished) {
-		GameService gameService = new GameService();
-		Game game = new Game(user, hero, place, dateStarted, dateFinished);
-		if(!gameService.exists(game))
-			gameService.save(game);
-	}
+//	private void saveUserResultsToDB(Hero hero, User user, int place) {
+//		ResultService resultService = new ResultService();
+//		Result result = new Result(user, hero, place);
+//		if(!resultService.exists(result))
+//			resultService.save(result);
+//	}
 	
-	private void saveOtherDeadPlayersResultsToDB() {
+	private Set<Result> saveOtherDeadPlayersResultsToDB() {
 		UserService service = new UserService();
 		User otherPlayer = service.getByNameAndBTag("Other Player", 0);
 		
 		int mainPlayerPlace = getMainPlayer().getPlace();
 		
+		Set<Result> results = new HashSet<Result>();
+		
 		for (Player player : playersList) {
 			if((player.getPlace() < mainPlayerPlace && mainPlayerPlace != 2) || player.isMainPlayer())
 				continue;
-			saveUserResultsToDB(player.getHero(), otherPlayer, player.getPlace(), timeStarted, timeFinished);
+//			saveUserResultsToDB(player.getHero(), otherPlayer, player.getPlace());
+			
+			Result result = new Result(otherPlayer, player.getHero(), player.getPlace());
+			results.add(result);
+			
 		}
+		
+		return results;
 	}
 	
 	private User convertToDBUser(Player player) {

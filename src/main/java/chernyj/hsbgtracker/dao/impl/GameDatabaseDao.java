@@ -1,8 +1,5 @@
 package chernyj.hsbgtracker.dao.impl;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,19 +16,11 @@ import org.hibernate.query.Query;
 
 import chernyj.hsbgtracker.dao.GameDao;
 import chernyj.hsbgtracker.entity.Game;
-import chernyj.hsbgtracker.entity.Hero;
-import chernyj.hsbgtracker.entity.User;
-import chernyj.hsbgtracker.utils.DateConverter;
+import chernyj.hsbgtracker.entity.Result;
 import chernyj.hsbgtracker.utils.HibernateUtil;
 
 public class GameDatabaseDao extends AbstractHibernateDao<Game> implements GameDao {
-
-	@Override
-	public void saveResults(User user, Hero hero, Date date, int place) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	@Override
 	public Game getByTimes(Date timeStart, Date timeFinish) {
 		Game game = null;
@@ -76,11 +65,8 @@ public class GameDatabaseDao extends AbstractHibernateDao<Game> implements GameD
 			
 			List<Predicate> predicates = new ArrayList<Predicate>();
 			
-			predicates.add(builder.equal(root.get("timeStarted"), game.getTimeStarted()));
 			predicates.add(builder.equal(root.get("timeFinished"), game.getTimeFinished()));
-			predicates.add(builder.equal(root.get("hero"), game.getHero()));
-			predicates.add(builder.equal(root.get("place"), game.getPlace()));
-			predicates.add(builder.equal(root.get("user"), game.getUser()));
+			predicates.add(builder.equal(root.get("timeStarted"), game.getTimeStarted()));
 			
 			criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {}));
 

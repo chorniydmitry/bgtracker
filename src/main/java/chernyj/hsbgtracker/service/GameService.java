@@ -1,9 +1,13 @@
 package chernyj.hsbgtracker.service;
 
 import java.util.Date;
+import java.util.List;
 
 import chernyj.hsbgtracker.dao.GameDao;
+import chernyj.hsbgtracker.dao.ResultDao;
 import chernyj.hsbgtracker.dao.impl.GameDatabaseDao;
+import chernyj.hsbgtracker.dao.impl.ResultDatabaseDao;
+import chernyj.hsbgtracker.entity.Result;
 import chernyj.hsbgtracker.entity.Game;
 import chernyj.hsbgtracker.entity.Hero;
 import chernyj.hsbgtracker.entity.User;
@@ -20,16 +24,16 @@ public class GameService {
 		dao.add(game);
 	}
 	
-	public Game getByTimes(Date timeStart, Date timeFinish) {
-		return dao.getByTimes(timeStart, timeFinish);
-	}
-
 	public Game getById(long id) {
 		return dao.getById(id);
 	}
 	
 	public boolean exists(Game game) {
 		return dao.exists(game);
+	}
+	
+	public List<Game> getAll() {
+		return dao.getAll();
 	}
 
 }
