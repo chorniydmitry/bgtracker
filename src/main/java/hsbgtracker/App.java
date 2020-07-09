@@ -9,6 +9,7 @@ import chernyj.hsbgtracker.swing.MainController;
 import chernyj.hsbgtracker.swing.ResultsController;
 import chernyj.hsbgtracker.swing.ResultsFrame;
 import chernyj.hsbgtracker.swing.Tray;
+import chernyj.hsbgtracker.swing.statistics.StatisticsController;
 import chernyj.hsbgtracker.utils.ApplicationConfiguration;
 import chernyj.hsbgtracker.utils.C;
 import chernyj.hsbgtracker.utils.LogFileReader;
@@ -74,10 +75,12 @@ public class App {
 
 		service.addAll(heroes);
 	}
-
-	public static void main(String[] args) {
-		//addHeroesToDB();
-
+	
+	public static void loadStatictics() {
+		new StatisticsController();
+	}
+	
+	public static void appStart() {
 		new MainController(new Tray());
 
 		LogFileReader reader = new LogFileReader(ApplicationConfiguration.getItem("powerlog.filepath"));
@@ -94,5 +97,14 @@ public class App {
 		reader.register(game);
 
 		reader.run();
+	}
+
+	public static void main(String[] args) {
+		//addHeroesToDB();
+		//appStart();
+		loadStatictics();
+		
+
+
 	}
 }
