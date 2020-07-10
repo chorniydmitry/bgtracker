@@ -1,9 +1,14 @@
 package chernyj.hsbgtracker.swing.statistics;
 
+import java.awt.Desktop;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.FileSystems;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -55,13 +60,22 @@ public class StatisticsController {
 		}
 		
 		context.put("context", statsList);
+		
+		System.out.println(Paths.get("").toFile().getAbsolutePath()+"/pages/history.html");
 
 		Writer writer = new OutputStreamWriter(System.out);
 		MustacheFactory mustacheFactory = new DefaultMustacheFactory();
-		Mustache template = mustacheFactory.compile("statistics.mustache");
+		Mustache template = mustacheFactory.compile(Paths.get("").toFile().getAbsolutePath()+"/pages/history.html");
 		try {
 			template.execute(writer, context).close();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			Desktop.getDesktop().browse(new URI("file:///"+Paths.get("").toFile().getAbsolutePath()+"/temp.html"));
+		} catch (IOException | URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

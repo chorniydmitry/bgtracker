@@ -9,6 +9,7 @@ import chernyj.hsbgtracker.swing.MainController;
 import chernyj.hsbgtracker.swing.ResultsController;
 import chernyj.hsbgtracker.swing.ResultsFrame;
 import chernyj.hsbgtracker.swing.Tray;
+import chernyj.hsbgtracker.swing.statistics.GameController;
 import chernyj.hsbgtracker.swing.statistics.StatisticsController;
 import chernyj.hsbgtracker.utils.ApplicationConfiguration;
 import chernyj.hsbgtracker.utils.C;
@@ -98,11 +99,32 @@ public class App {
 
 		reader.run();
 	}
+	
+	
+	private static void testGameController() {
+		GameController gc = new GameController();
+		gc.addResult("TB_BaconShop_HERO_45", 5);
+		gc.addResult("TB_BaconShop_HERO_43", 3);
+		gc.addResult("TB_BaconShop_HERO_42", 1);
+		gc.addResult("TB_BaconShop_HERO_41", 4);
+		gc.addResult("TB_BaconShop_HERO_40", 8);
+		gc.addResult("TB_BaconShop_HERO_45", 5);
+		gc.addResult("TB_BaconShop_HERO_43", 3);
+		gc.addResult("TB_BaconShop_HERO_42", 1);
+		gc.addResult("TB_BaconShop_HERO_41", 4);
+		gc.addResult("TB_BaconShop_HERO_40", 8);
+		gc.addResult("TB_BaconShop_HERO_45", 5);
+		gc.addResult("TB_BaconShop_HERO_43", 3);
+		gc.addResult("TB_BaconShop_HERO_42", 1);
+		gc.addResult("TB_BaconShop_HERO_41", 4);
+		gc.addResult("TB_BaconShop_HERO_40", 8);
+	}
 
 	public static void main(String[] args) {
 		//addHeroesToDB();
 		//appStart();
-		loadStatictics();
+		//loadStatictics();
+		testGameController();
 		
 
 
