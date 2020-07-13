@@ -14,6 +14,7 @@ import chernyj.hsbgtracker.service.GameService;
 import chernyj.hsbgtracker.service.HeroService;
 import chernyj.hsbgtracker.service.UserService;
 import chernyj.hsbgtracker.swing.ResultsController;
+import chernyj.hsbgtracker.swing.statistics.GameController;
 import chernyj.hsbgtracker.utils.DateConverter;
 import chernyj.hsbgtracker.utils.observers.LogFileObserver;
 
@@ -25,6 +26,8 @@ public class BattlegroundsAnalyser implements LogFileObserver {
 
 	private Date timeStarted;
 	private Date timeFinished;
+	
+	GameController gc = new GameController();
 
 	public void setResultsController(ResultsController resultsController) {
 		this.resultsController = resultsController;
@@ -45,6 +48,9 @@ public class BattlegroundsAnalyser implements LogFileObserver {
 		results.addAll(getOtherDeadPlayersResults());
 
 		saveGame(results);
+		
+		
+		gc.addResult(mainPlayer.getHero().getHsId(), mainPlayer.getPlace());
 
 		resultsController.showResult(mainPlayer);
 	}
