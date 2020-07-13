@@ -3,16 +3,32 @@
 <meta http-equiv="refresh" content="3">
 </head>
 
+<style type="text/css">
+.caption {
+    text-align: center;
+    display:inline;
+    position: relative;
+    margin: 0px;
+    padding: 0px;
+    top: -5px;
+    left: -20px;
+    color: orange;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+html {
+    margin-left: 10px;
+}
+img {
 
-<table>
+    height: 40px;
+    width: 40px; 
+    margin-left: -15px;
+}
 
-<tr>
-{{#images}}<td><img src="{{.}}"></td>{{/images}}
-</tr>
-<tr>
-{{#places}}<td>{{.}}</td>{{/places}}
-</tr>
+</style>
 
-</table>
-
+{{#games}}
+    <img src="{{imageLink}}" />
+    <div class="caption">{{place}}</div>
+{{/games}}
 </html>

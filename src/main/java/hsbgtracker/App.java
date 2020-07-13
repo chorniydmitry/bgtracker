@@ -122,9 +122,9 @@ public class App {
 
 	public static void main(String[] args) {
 		//addHeroesToDB();
-		appStart();
+		//appStart();
 		//loadStatictics();
-		//testGameController();
+		testGameController();
 		
 
 

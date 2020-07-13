@@ -14,6 +14,7 @@ public class C {
 	public static final String APPLICATION_NAME = "BATTLEGROUDS TRACKER";
 	
 	public static final Image APP_ICON = new ImageIcon(C.class.getResource("/images/logo.png")).getImage();
+	public static final String GAMERESULTS_FILEPATH = "games_results.html";
 	
 
 }
