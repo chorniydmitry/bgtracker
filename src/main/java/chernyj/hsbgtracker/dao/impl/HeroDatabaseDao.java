@@ -54,7 +54,7 @@ public class HeroDatabaseDao extends AbstractHibernateDao<Hero> implements HeroD
 			CriteriaQuery<Hero> criteriaQuery = builder.createQuery(Hero.class);
 
 			Root<Hero> root = criteriaQuery.from(Hero.class);
-			criteriaQuery.select(root).where(builder.equal((root.get("hsId")), hsId));
+			criteriaQuery.select(root).where(builder.like((root.get("hsId")), hsId));
 
 			Query<Hero> query = session.createQuery(criteriaQuery);
 
