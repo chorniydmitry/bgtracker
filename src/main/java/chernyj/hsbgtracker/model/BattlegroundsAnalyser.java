@@ -14,18 +14,27 @@ import chernyj.hsbgtracker.service.GameService;
 import chernyj.hsbgtracker.service.HeroService;
 import chernyj.hsbgtracker.service.UserService;
 import chernyj.hsbgtracker.swing.ResultsController;
+import chernyj.hsbgtracker.swing.SetMmrController;
+import chernyj.hsbgtracker.swing.SetMmrDialog;
 import chernyj.hsbgtracker.swing.statistics.GameController;
+import chernyj.hsbgtracker.utils.ApplicationConfiguration;
 import chernyj.hsbgtracker.utils.DateConverter;
 import chernyj.hsbgtracker.utils.observers.LogFileObserver;
+import chernyj.hsbgtracker.utils.observers.SetMmrObserver;
 
-public class BattlegroundsAnalyser implements LogFileObserver {
+public class BattlegroundsAnalyser implements LogFileObserver, SetMmrObserver {
 
 	private ArrayList<Player> playersList = new ArrayList<>();
 
 	private ResultsController resultsController;
+	
+	Player mainPlayer;
 
 	private Date timeStarted;
 	private Date timeFinished;
+	
+	private int startMmr;
+	private int currentMmr;
 	
 	GameController gc = new GameController();
 
@@ -34,14 +43,7 @@ public class BattlegroundsAnalyser implements LogFileObserver {
 	}
 
 	private void showResults() {
-		Player mainPlayer = getMainPlayer();
-
-		System.out.println(mainPlayer == null);
-		System.out.println("GAME FINISHED at: " + timeFinished + " . YOR FINAL PLACE IS: " + mainPlayer.getPlace()
-				+ " YOUR HERO IS: " + mainPlayer.getHero());
-
-		// resultsController.addNewResult(mainPlayer.getHero().getHsId(),
-		// mainPlayer.getPlace());
+		mainPlayer = getMainPlayer();
 
 		Set<Result> results = new HashSet<>();
 		results.addAll(getMainPlayerResult());
@@ -49,8 +51,13 @@ public class BattlegroundsAnalyser implements LogFileObserver {
 
 		saveGame(results);
 		
-		
-		gc.addResult(mainPlayer.getHero().getHsId(), mainPlayer.getPlace());
+		if(Boolean.parseBoolean(ApplicationConfiguration.getItem("show.updatemmrdialog")))
+		{
+			new SetMmrController(new SetMmrDialog(250, 60, "Введите текущий MMR")).register(this);
+			
+		} else {
+			gc.addResult(mainPlayer.getHero().getHsId(), mainPlayer.getPlace(), 0);
+		}
 
 		resultsController.showResult(mainPlayer);
 	}
@@ -72,7 +79,6 @@ public class BattlegroundsAnalyser implements LogFileObserver {
 		} else {
 			System.out.println("Game already saved nothing to do...");
 		}
-
 	}
 
 	private Set<Result> getMainPlayerResult() {
@@ -232,5 +238,19 @@ public class BattlegroundsAnalyser implements LogFileObserver {
 		showResults();
 		playersList = new ArrayList<>();
 	}
+	
+	public int getStartMmr() {
+		return startMmr;
+	}
 
+	public void setStartMmr(int startMmr) {
+		this.startMmr = startMmr;
+		gc.setStartMmr(startMmr);
+	}
+
+	@Override
+	public void update(int mmr) {
+		currentMmr = mmr;
+		gc.addResult(mainPlayer.getHero().getHsId(), mainPlayer.getPlace(), currentMmr);
+	}
 }

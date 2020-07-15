@@ -3,21 +3,22 @@ package hsbgtracker;
 import java.util.ArrayList;
 
 import chernyj.hsbgtracker.entity.Hero;
+import chernyj.hsbgtracker.entity.User;
 import chernyj.hsbgtracker.model.BattlegroundsAnalyser;
 import chernyj.hsbgtracker.service.HeroService;
-import chernyj.hsbgtracker.swing.GameFinishedDialog;
+import chernyj.hsbgtracker.service.UserService;
 import chernyj.hsbgtracker.swing.ResultsController;
 import chernyj.hsbgtracker.swing.ResultsFrame;
-import chernyj.hsbgtracker.swing.SettingsController;
-import chernyj.hsbgtracker.swing.SettingsDialog;
+import chernyj.hsbgtracker.swing.SetMmrController;
+import chernyj.hsbgtracker.swing.SetMmrDialog;
 import chernyj.hsbgtracker.swing.Tray;
 import chernyj.hsbgtracker.swing.TrayController;
-import chernyj.hsbgtracker.swing.statistics.GameController;
 import chernyj.hsbgtracker.swing.statistics.StatisticsController;
 import chernyj.hsbgtracker.utils.ApplicationConfiguration;
 import chernyj.hsbgtracker.utils.C;
 import chernyj.hsbgtracker.utils.LogFileReader;
 import chernyj.hsbgtracker.utils.LogFileUtils;
+import chernyj.hsbgtracker.utils.StartMmrSaver;
 
 public class App {
 
@@ -80,11 +81,11 @@ public class App {
 
 		service.addAll(heroes);
 	}
-	
+
 	public static void loadStatictics() {
 		new StatisticsController();
 	}
-	
+
 	public static void appStart() {
 		new TrayController(new Tray());
 
@@ -92,47 +93,35 @@ public class App {
 
 		BattlegroundsAnalyser game = new BattlegroundsAnalyser();
 
-		LogFileUtils utils = new LogFileUtils();
+		if (Boolean.parseBoolean(ApplicationConfiguration.getItem("show.prevresultdialog"))) {
+			ResultsController resController = new ResultsController(new ResultsFrame(1000, 110, C.APPLICATION_NAME));
+			game.setResultsController(resController);
+		}
 
-		ResultsController resController = new ResultsController(new ResultsFrame(1000, 110, C.APPLICATION_NAME));
+		if (Boolean.parseBoolean(ApplicationConfiguration.getItem("show.updatemmrdialog"))) {
+			UserService us = new UserService();
+			User user = us.getUser(Long.parseLong(ApplicationConfiguration.getItem("lastplayer.id")));
+			if (user.getMmr() != 0)
+				new SetMmrController(new SetMmrDialog(250, 60, "Проверьте свой MMR", user.getMmr())).register(new StartMmrSaver());
+			else
+				new SetMmrController(new SetMmrDialog(250, 60, "Проверьте свой MMR")).register(new StartMmrSaver());
+			
+		}
 
-		game.setResultsController(resController);
-
-		reader.register(utils);
+		reader.register(new LogFileUtils());
 		reader.register(game);
 
 		reader.run();
 	}
-	
-	
-	private static void testGameController() {
-		GameController gc = new GameController();
-		gc.addResult("TB_BaconShop_HERO_45", 5);
-		gc.addResult("TB_BaconShop_HERO_43", 3);
-		gc.addResult("TB_BaconShop_HERO_42", 1);
-		gc.addResult("TB_BaconShop_HERO_41", 4);
-		gc.addResult("TB_BaconShop_HERO_40", 8);
-		gc.addResult("TB_BaconShop_HERO_45", 5);
-		gc.addResult("TB_BaconShop_HERO_43", 3);
-		gc.addResult("TB_BaconShop_HERO_42", 1);
-		gc.addResult("TB_BaconShop_HERO_41", 4);
-		gc.addResult("TB_BaconShop_HERO_40", 8);
-		gc.addResult("TB_BaconShop_HERO_45", 5);
-		gc.addResult("TB_BaconShop_HERO_43", 3);
-		gc.addResult("TB_BaconShop_HERO_42", 1);
-		gc.addResult("TB_BaconShop_HERO_41", 4);
-		gc.addResult("TB_BaconShop_HERO_40", 8);
-	}
 
 	public static void main(String[] args) {
-		//addHeroesToDB();
-//		appStart();
-		//loadStatictics();
-		//testGameController();
-		
+		// addHeroesToDB();
+		appStart();
+		// loadStatictics();
+		// testGameController();
 
-		//new GameFinishedDialog(250, 50, "Игра закончена ваше место(у параши) № 8");
-		
-		new SettingsController(new SettingsDialog(500, 200, "Натройки приложения"));
+		// new GameFinishedDialog(250, 50, "Игра закончена ваше место(у параши) № 8");
+
+		//new SettingsController(new SettingsDialog(500, 200, "Натройки приложения"));
 	}
 }

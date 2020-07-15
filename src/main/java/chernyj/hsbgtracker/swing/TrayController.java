@@ -23,7 +23,7 @@ public class TrayController {
 	}
 
 	private void doOpenSettings() {
-		tray.displayMessage("SETTINGS");
+		new SettingsController(new SettingsDialog(500, 200, "Натройки приложения"));
 		
 	}
 

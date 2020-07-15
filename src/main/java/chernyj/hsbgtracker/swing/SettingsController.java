@@ -39,6 +39,7 @@ public class SettingsController {
 		
 		dialog.getCbShowResultPopup().setSelected(showingPreviousResultsDialog);
 		dialog.getCbShowMMRUpdateDialog().setSelected(showingUpdateMMRDialog);
+		dialog.getCbUpdateFileForStream().setSelected(useGameResultHTML);
 		
 		
 	}
@@ -48,7 +49,7 @@ public class SettingsController {
 		List<User> users = userService.getAll();
 
 		for (User user : users) {
-			userNameAndBtagList.add(user.getName() + " # " + user.getbTag());
+			userNameAndBtagList.add(user.getName() + "#" + user.getbTag());
 			mmrList.add(user.getMmr());
 		}
 	}

@@ -15,32 +15,40 @@ import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 
 import chernyj.hsbgtracker.swing.ResultsFrame;
+import chernyj.hsbgtracker.utils.ApplicationConfiguration;
 import chernyj.hsbgtracker.utils.C;
 
 public class GameController {
 
 	private List<GamePlayed> gamesPlayedList = new ArrayList<>();
+	private int currentMmr;
+	private int startMmr = Integer.parseInt(ApplicationConfiguration.getItem("lastplayer.startmmr"));
 
 	public GameController() {
 
 	}
 
-	public void addResult(String hero, int place) {
+	public void addResult(String hero, int place, int currentMmr) {
 		String image = ResultsFrame.class.getResource("/images/heroes/" + hero + ".jpg").getPath();
 
-		gamesPlayedList.add(new GamePlayed(image, place));
-
+		gamesPlayedList.add(new GamePlayed(image, place, currentMmr, startMmr));
+		this.currentMmr = currentMmr;
+		
+		System.out.println(image + " " + place + " " + currentMmr + " " + startMmr);
+		
 		updateHtml();
 	}
 
-	private void updateHtml() {
+	public void updateHtml() {
 		Map<String, Object> context = new HashMap<>();
 
 		context.put("games", gamesPlayedList);
-
+		context.put("startMmr", startMmr);
+		context.put("currentMmr", currentMmr);
+		
 		StringWriter writer = new StringWriter();
 		MustacheFactory mustacheFactory = new DefaultMustacheFactory();
-		Mustache template = mustacheFactory.compile("templates/game.mustache");
+		Mustache template = (Boolean.parseBoolean(ApplicationConfiguration.getItem("show.updatemmrdialog"))) ? mustacheFactory.compile("templates/game_with_mmr.mustache") : mustacheFactory.compile("templates/game.mustache");
 		try {
 			template.execute(writer, context).flush();
 		} catch (IOException e) {
@@ -82,11 +90,25 @@ public class GameController {
 	class GamePlayed {
 		private String imageLink;
 		private int place;
+		private int startMmr;
+		private int currentMmr;
 
 		public GamePlayed(String imageLink, int place) {
 			this.imageLink = imageLink;
 			this.place = place;
 		}
+		
+		
+
+		public GamePlayed(String imageLink, int place, int startMmr, int currentMmr) {
+			super();
+			this.imageLink = imageLink;
+			this.place = place;
+			this.startMmr = startMmr;
+			this.currentMmr = currentMmr;
+		}
+
+
 
 		public String getImageLink() {
 			return imageLink;
@@ -104,6 +126,31 @@ public class GameController {
 			this.place = place;
 		}
 
+		public int getStartMmr() {
+			return startMmr;
+		}
+
+		public void setStartMmr(int startMmr) {
+			this.startMmr = startMmr;
+		}
+
+		public int getCurrentMmr() {
+			return currentMmr;
+		}
+
+		public void setCurrentMmr(int currentMmr) {
+			this.currentMmr = currentMmr;
+		}
+		
+	}
+
+	public void setCurrentMmr(int mmr) {
+		currentMmr = mmr;
+	}
+
+	public void setStartMmr(int startMmr) {
+		this.startMmr = startMmr;
+		
 	}
 
 }
