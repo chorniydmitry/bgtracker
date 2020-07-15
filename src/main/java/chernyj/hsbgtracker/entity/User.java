@@ -14,8 +14,9 @@ public class User extends Model {
 	@Column(name = "btag")
 	private int bTag;
 	
+	@Column(name = "mmr")
+	private int mmr;
 	
-
 	public User() {
 		super();
 	}
@@ -44,12 +45,21 @@ public class User extends Model {
 	public void setbTag(int bTag) {
 		this.bTag = bTag;
 	}
+	
+	public int getMmr() {
+		return mmr;
+	}
+
+	public void setMmr(int mmr) {
+		this.mmr = mmr;
+	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + bTag;
+		result = prime * result + mmr;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -65,6 +75,8 @@ public class User extends Model {
 		User other = (User) obj;
 		if (bTag != other.bTag)
 			return false;
+		if (mmr != other.mmr)
+			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -75,7 +87,7 @@ public class User extends Model {
 
 	@Override
 	public String toString() {
-		return "User [name=" + name + ", bTag=" + bTag + "]";
+		return "User [name=" + name + ", bTag=" + bTag + ", mmr=" + mmr +"]";
 	}
 	
 	

@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import chernyj.hsbgtracker.entity.Hero;
 import chernyj.hsbgtracker.model.BattlegroundsAnalyser;
 import chernyj.hsbgtracker.service.HeroService;
-import chernyj.hsbgtracker.swing.MainController;
+import chernyj.hsbgtracker.swing.GameFinishedDialog;
 import chernyj.hsbgtracker.swing.ResultsController;
 import chernyj.hsbgtracker.swing.ResultsFrame;
+import chernyj.hsbgtracker.swing.SettingsController;
+import chernyj.hsbgtracker.swing.SettingsDialog;
 import chernyj.hsbgtracker.swing.Tray;
+import chernyj.hsbgtracker.swing.TrayController;
 import chernyj.hsbgtracker.swing.statistics.GameController;
 import chernyj.hsbgtracker.swing.statistics.StatisticsController;
 import chernyj.hsbgtracker.utils.ApplicationConfiguration;
@@ -57,7 +60,7 @@ public class App {
 //		heroes.add(new Hero(60362, "TB_BaconShop_HERO_45", 40, "Суперзлодей Рафаам"));
 //		heroes.add(new Hero(60364, "TB_BaconShop_HERO_47", 40, "Тирион Фордринг"));
 //		heroes.add(new Hero(60366, "TB_BaconShop_HERO_49", 40, "Миллхаус Манашторм"));
-		heroes.add(new Hero(60367, "TB_BaconShop_HERO_50", 40, "Тесс Седогрив"));
+//		heroes.add(new Hero(60367, "TB_BaconShop_HERO_50", 40, "Тесс Седогрив"));
 //		heroes.add(new Hero(60369, "TB_BaconShop_HERO_52", 40, "Смертокрыл"));
 //		heroes.add(new Hero(60370, "TB_BaconShop_HERO_53", 40, "Изера"));
 //		heroes.add(new Hero(60372, "TB_BaconShop_HERO_55", 40, "Грибомант Флургл"));
@@ -83,7 +86,7 @@ public class App {
 	}
 	
 	public static void appStart() {
-		new MainController(new Tray());
+		new TrayController(new Tray());
 
 		LogFileReader reader = new LogFileReader(ApplicationConfiguration.getItem("powerlog.filepath"));
 
@@ -123,11 +126,13 @@ public class App {
 
 	public static void main(String[] args) {
 		//addHeroesToDB();
-		appStart();
+//		appStart();
 		//loadStatictics();
 		//testGameController();
 		
 
-
+		//new GameFinishedDialog(250, 50, "Игра закончена ваше место(у параши) № 8");
+		
+		new SettingsController(new SettingsDialog(500, 200, "Натройки приложения"));
 	}
 }

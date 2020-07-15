@@ -5,9 +5,11 @@ import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
+import java.awt.TrayIcon.MessageType;
 import java.util.LinkedList;
 import java.util.List;
 
+import antlr.debug.MessageAdapter;
 import chernyj.hsbgtracker.utils.C;
 
 /**
@@ -41,6 +43,10 @@ public class Tray {
 		menuItems.add(miSettings);
 		menuItems.add(miExit);
 	}
+	
+	public void displayMessage(String text) {
+		trayIcon.displayMessage("8 МЕСТО!", null, MessageType.NONE);
+	}
 
 	private void initTrayIcon() {
 
@@ -63,7 +69,7 @@ public class Tray {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void setInfoMessageInTray(String message) {
 		trayIcon.displayMessage(C.APPLICATION_NAME, message, TrayIcon.MessageType.INFO);
 	}

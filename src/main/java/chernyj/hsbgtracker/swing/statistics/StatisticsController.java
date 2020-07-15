@@ -61,8 +61,6 @@ public class StatisticsController {
 		
 		context.put("context", statsList);
 		
-		System.out.println(Paths.get("").toFile().getAbsolutePath()+"/pages/history.html");
-
 		Writer writer = new OutputStreamWriter(System.out);
 		MustacheFactory mustacheFactory = new DefaultMustacheFactory();
 		Mustache template = mustacheFactory.compile(Paths.get("").toFile().getAbsolutePath()+"/pages/history.html");
