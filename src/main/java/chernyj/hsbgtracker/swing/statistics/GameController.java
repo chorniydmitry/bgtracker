@@ -31,11 +31,14 @@ public class GameController {
 	public void addResult(String hero, int place, int currentMmr) {
 		String image = ResultsFrame.class.getResource("/images/heroes/" + hero + ".jpg").getPath();
 
+		if(currentMmr == 0)
+			currentMmr = startMmr;
+		
 		gamesPlayedList.add(new GamePlayed(image, place, currentMmr, startMmr));
 		this.currentMmr = currentMmr;
 		
 		System.out.println(image + " " + place + " " + currentMmr + " " + startMmr);
-		
+
 		updateHtml();
 	}
 

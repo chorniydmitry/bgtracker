@@ -35,6 +35,7 @@ public class BattlegroundsAnalyser implements LogFileObserver, SetMmrObserver {
 	
 	private int startMmr;
 	private int currentMmr;
+	boolean isCurrentGameTracking = false;
 	
 	GameController gc = new GameController();
 
@@ -51,7 +52,7 @@ public class BattlegroundsAnalyser implements LogFileObserver, SetMmrObserver {
 
 		saveGame(results);
 		
-		if(Boolean.parseBoolean(ApplicationConfiguration.getItem("show.updatemmrdialog")))
+		if(Boolean.parseBoolean(ApplicationConfiguration.getItem("show.updatemmrdialog")) && isCurrentGameTracking)
 		{
 			new SetMmrController(new SetMmrDialog(250, 60, "Введите текущий MMR")).register(this);
 			
@@ -230,6 +231,9 @@ public class BattlegroundsAnalyser implements LogFileObserver, SetMmrObserver {
 
 		if (data.get("infoType").equals("gameFinished"))
 			finishGame(data);
+		
+		if (data.get("infoType").equals("fileReachedEOF"))
+			isCurrentGameTracking = true;
 
 	}
 

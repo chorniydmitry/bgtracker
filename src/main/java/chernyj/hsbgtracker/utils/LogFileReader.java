@@ -34,10 +34,6 @@ public class LogFileReader implements Runnable, LogFileSubject {
 
 	private ArrayList<LogFileObserver> observers = new ArrayList<LogFileObserver>();
 
-	public enum InfoType {
-		MAIN_PLAYER_INFO, PLAYER_PLACE, GAME_STATE, SPECTATING, PLAYER_HERO,
-	}
-
 	public LogFileReader(String myFile) {
 		logFile = new File(myFile);
 	}
@@ -254,6 +250,7 @@ public class LogFileReader implements Runnable, LogFileSubject {
 				line = br.readLine();
 
 				if (line == null) {
+					notifyObservers(getEndOfFileReachedInfo());
 					Thread.sleep(500);
 					continue;
 				}
@@ -313,6 +310,13 @@ public class LogFileReader implements Runnable, LogFileSubject {
 		if (debug)
 			this.printLine("Exit the program...");
 
+	}
+	
+	private Map<String, String> getEndOfFileReachedInfo() {
+		Map<String, String> resultSet = new HashMap<>();
+		resultSet.put("infoType", "fileReachedEOF");
+		
+		return resultSet;
 	}
 
 	private void readBlock(BufferedReader reader) throws IOException {
