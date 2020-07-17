@@ -28,7 +28,7 @@ public class BattlegroundsAnalyser implements LogFileObserver, SetMmrObserver {
 
 	private ResultsController resultsController;
 	
-	Player mainPlayer;
+	private Player mainPlayer;
 
 	private Date timeStarted;
 	private Date timeFinished;
@@ -54,7 +54,7 @@ public class BattlegroundsAnalyser implements LogFileObserver, SetMmrObserver {
 		
 		if(Boolean.parseBoolean(ApplicationConfiguration.getItem("show.updatemmrdialog")) && isCurrentGameTracking)
 		{
-			new SetMmrController(new SetMmrDialog(250, 60, "Введите текущий MMR")).register(this);
+			new SetMmrController(new SetMmrDialog(250, 60, "Введите текущий MMR"), mainPlayer).register(this);
 			
 		} else {
 			gc.addResult(mainPlayer.getHero().getHsId(), mainPlayer.getPlace(), 0);

@@ -27,19 +27,6 @@ public class SetMmrDialog extends JDialog {
 		this.setVisible(true);
 	}
 	
-	public SetMmrDialog(int width, int height, String title, int mmr) {
-		this.setSize(new Dimension(width, height));
-		this.setTitle(title);
-		this.setLocationRelativeTo(null);
-		this.setAlwaysOnTop(true);
-		
-		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		
-		tfMMR.setText(String.valueOf(mmr));
-		layoutDialog();
-		this.setVisible(true);
-	}
-	
 	private void layoutDialog() {
 		this.add(lblCurrentMMR, BorderLayout.WEST);
 		this.add(tfMMR, BorderLayout.CENTER);

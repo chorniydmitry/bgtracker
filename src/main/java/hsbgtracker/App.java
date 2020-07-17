@@ -102,9 +102,9 @@ public class App {
 			UserService us = new UserService();
 			User user = us.getUser(Long.parseLong(ApplicationConfiguration.getItem("lastplayer.id")));
 			if (user.getMmr() != 0)
-				new SetMmrController(new SetMmrDialog(250, 60, "Проверьте свой MMR", user.getMmr())).register(new StartMmrSaver());
+				new SetMmrController(new SetMmrDialog(250, 60, "Проверьте свой MMR"), user).register(new StartMmrSaver());
 			else
-				new SetMmrController(new SetMmrDialog(250, 60, "Проверьте свой MMR")).register(new StartMmrSaver());
+				new SetMmrController(new SetMmrDialog(250, 60, "Проверьте свой MMR"), user).register(new StartMmrSaver());
 			
 		}
 

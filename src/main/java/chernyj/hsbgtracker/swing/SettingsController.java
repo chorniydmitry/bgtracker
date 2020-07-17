@@ -11,8 +11,7 @@ public class SettingsController {
 
 	private SettingsDialog dialog;
 
-	private List<String> userNameAndBtagList = new ArrayList<>();
-	private List<Integer> mmrList = new ArrayList<>();
+	private List<User> userList = new ArrayList<>();
 
 	public SettingsController(SettingsDialog dialog) {
 		this.dialog = dialog;
@@ -46,30 +45,37 @@ public class SettingsController {
 	private void loadUsers() {
 		UserService userService = new UserService();
 
-		List<User> users = userService.getAll();
+		userList = userService.getAll();
+		userList.remove(0);
 
-		for (User user : users) {
-			userNameAndBtagList.add(user.getName() + "#" + user.getbTag());
-			mmrList.add(user.getMmr());
-		}
 	}
 
 	private void loadCheckBoxUsers() {
-		userNameAndBtagList.forEach(i -> dialog.getComboUsers().addItem(i));
+		userList.forEach(i -> dialog.getComboUsers().addItem(i.getName()));
 	}
 	
 	private void loadMMR() {
 		int index = dialog.getComboUsers().getSelectedIndex();
 		
-		dialog.getLblCurrentMMR().setText(String.valueOf(mmrList.get(index)));
+		dialog.getLblCurrentMMR().setText(String.valueOf(userList.get(index).getMmr()));
 	}
 	
 	private void setListeners() {
 		dialog.getComboUsers().addActionListener(l->doComboUsersValueChanged());
+		dialog.getBtnChangeMMR().addActionListener(l->doChangeMMR());
+		dialog.getBtnChangePathToHearthstone().addActionListener(l->doChangePathToHearthstone());
+	}
+
+	private void doChangePathToHearthstone() {
+	}
+
+	private void doChangeMMR() {
 	}
 
 	private void doComboUsersValueChanged() {
 		loadMMR();
 	}
+	
+	
 
 }

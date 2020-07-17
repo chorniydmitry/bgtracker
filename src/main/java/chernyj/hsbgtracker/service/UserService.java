@@ -21,5 +21,9 @@ public class UserService {
 	public User getUser(Long id) {
 		return dao.getById(id);
 	}
+	
+	public void update(User user) {
+		dao.update(user);
+	}
 
 }
