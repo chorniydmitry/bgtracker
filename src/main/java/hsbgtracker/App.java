@@ -7,18 +7,17 @@ import chernyj.hsbgtracker.entity.User;
 import chernyj.hsbgtracker.model.BattlegroundsAnalyser;
 import chernyj.hsbgtracker.service.HeroService;
 import chernyj.hsbgtracker.service.UserService;
+import chernyj.hsbgtracker.swing.GetMmrValue;
 import chernyj.hsbgtracker.swing.ResultsController;
 import chernyj.hsbgtracker.swing.ResultsFrame;
-import chernyj.hsbgtracker.swing.SetMmrController;
-import chernyj.hsbgtracker.swing.SetMmrDialog;
 import chernyj.hsbgtracker.swing.Tray;
 import chernyj.hsbgtracker.swing.TrayController;
+import chernyj.hsbgtracker.swing.statistics.HTMLUpdater;
 import chernyj.hsbgtracker.swing.statistics.StatisticsController;
 import chernyj.hsbgtracker.utils.ApplicationConfiguration;
 import chernyj.hsbgtracker.utils.C;
 import chernyj.hsbgtracker.utils.LogFileReader;
 import chernyj.hsbgtracker.utils.LogFileUtils;
-import chernyj.hsbgtracker.utils.StartMmrSaver;
 
 public class App {
 
@@ -92,6 +91,10 @@ public class App {
 		LogFileReader reader = new LogFileReader(ApplicationConfiguration.getItem("powerlog.filepath"));
 
 		BattlegroundsAnalyser game = new BattlegroundsAnalyser();
+		
+		if(Boolean.parseBoolean(ApplicationConfiguration.getItem("use.gameresultshtml"))) {
+			new HTMLUpdater().clear();
+		}
 
 		if (Boolean.parseBoolean(ApplicationConfiguration.getItem("show.prevresultdialog"))) {
 			ResultsController resController = new ResultsController(new ResultsFrame(1000, 110, C.APPLICATION_NAME));
@@ -101,11 +104,10 @@ public class App {
 		if (Boolean.parseBoolean(ApplicationConfiguration.getItem("show.updatemmrdialog"))) {
 			UserService us = new UserService();
 			User user = us.getUser(Long.parseLong(ApplicationConfiguration.getItem("lastplayer.id")));
-			if (user.getMmr() != 0)
-				new SetMmrController(new SetMmrDialog(250, 60, "Проверьте свой MMR"), user).register(new StartMmrSaver());
-			else
-				new SetMmrController(new SetMmrDialog(250, 60, "Проверьте свой MMR"), user).register(new StartMmrSaver());
 			
+			int startMmr = GetMmrValue.showInputDialog(null, null, 0, 0);
+			game.setStartMmr(startMmr);
+	
 		}
 
 		reader.register(new LogFileUtils());

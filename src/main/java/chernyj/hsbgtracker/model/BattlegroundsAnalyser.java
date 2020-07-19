@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.ImageIcon;
+
 import chernyj.hsbgtracker.entity.Game;
 import chernyj.hsbgtracker.entity.Hero;
 import chernyj.hsbgtracker.entity.Result;
@@ -13,16 +15,14 @@ import chernyj.hsbgtracker.entity.User;
 import chernyj.hsbgtracker.service.GameService;
 import chernyj.hsbgtracker.service.HeroService;
 import chernyj.hsbgtracker.service.UserService;
+import chernyj.hsbgtracker.swing.GetMmrValue;
 import chernyj.hsbgtracker.swing.ResultsController;
-import chernyj.hsbgtracker.swing.SetMmrController;
-import chernyj.hsbgtracker.swing.SetMmrDialog;
-import chernyj.hsbgtracker.swing.statistics.GameController;
+import chernyj.hsbgtracker.swing.statistics.HTMLUpdater;
 import chernyj.hsbgtracker.utils.ApplicationConfiguration;
 import chernyj.hsbgtracker.utils.DateConverter;
 import chernyj.hsbgtracker.utils.observers.LogFileObserver;
-import chernyj.hsbgtracker.utils.observers.SetMmrObserver;
 
-public class BattlegroundsAnalyser implements LogFileObserver, SetMmrObserver {
+public class BattlegroundsAnalyser implements LogFileObserver {
 
 	private ArrayList<Player> playersList = new ArrayList<>();
 
@@ -37,8 +37,8 @@ public class BattlegroundsAnalyser implements LogFileObserver, SetMmrObserver {
 	private int currentMmr;
 	boolean isCurrentGameTracking = false;
 	
-	GameController gc = new GameController();
-
+	HTMLUpdater htmlUpdater = new HTMLUpdater();
+	
 	public void setResultsController(ResultsController resultsController) {
 		this.resultsController = resultsController;
 	}
@@ -52,13 +52,13 @@ public class BattlegroundsAnalyser implements LogFileObserver, SetMmrObserver {
 
 		saveGame(results);
 		
-		if(Boolean.parseBoolean(ApplicationConfiguration.getItem("show.updatemmrdialog")) && isCurrentGameTracking)
-		{
-			new SetMmrController(new SetMmrDialog(250, 60, "Введите текущий MMR"), mainPlayer).register(this);
-			
-		} else {
-			gc.addResult(mainPlayer.getHero().getHsId(), mainPlayer.getPlace(), 0);
-		}
+		if(Boolean.parseBoolean(ApplicationConfiguration.getItem("show.updatemmrdialog")) && isCurrentGameTracking) {
+			currentMmr = GetMmrValue.showInputDialog(null, new ImageIcon(BattlegroundsAnalyser.class.getResource("/images/heroes/" + mainPlayer.getHero().getHsId() + ".jpg").getPath()), mainPlayer.getPlace(), 0);
+			htmlUpdater.setCurrentMmr(currentMmr);
+		}	
+		
+		htmlUpdater.addResult(mainPlayer.getHero().getHsId(), mainPlayer.getPlace(), 0);
+		htmlUpdater.setCurrentMmr(currentMmr);
 
 		resultsController.showResult(mainPlayer);
 	}
@@ -249,12 +249,7 @@ public class BattlegroundsAnalyser implements LogFileObserver, SetMmrObserver {
 
 	public void setStartMmr(int startMmr) {
 		this.startMmr = startMmr;
-		gc.setStartMmr(startMmr);
+		htmlUpdater.setStartMmr(startMmr);
 	}
 
-	@Override
-	public void update(int mmr) {
-		currentMmr = mmr;
-		gc.addResult(mainPlayer.getHero().getHsId(), mainPlayer.getPlace(), currentMmr);
-	}
 }

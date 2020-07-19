@@ -7,7 +7,6 @@ import java.util.List;
 import chernyj.hsbgtracker.entity.User;
 import chernyj.hsbgtracker.model.Player;
 import chernyj.hsbgtracker.service.UserService;
-import chernyj.hsbgtracker.utils.ApplicationConfiguration;
 import chernyj.hsbgtracker.utils.observers.SetMmrObserver;
 import chernyj.hsbgtracker.utils.subjects.SetMmrSubject;
 
