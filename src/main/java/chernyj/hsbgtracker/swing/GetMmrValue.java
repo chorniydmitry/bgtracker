@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 public class GetMmrValue {
 
 	public static int showInputDialog(Component parent, Icon icon, int place, int lastMmrValue) {
+		
 		JOptionPane optionPane = new JOptionPane("Введите значение ММР:", JOptionPane.PLAIN_MESSAGE,
 				JOptionPane.DEFAULT_OPTION, icon, null, lastMmrValue);
 		optionPane.setWantsInput(true);

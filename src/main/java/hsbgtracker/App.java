@@ -107,6 +107,7 @@ public class App {
 			
 			int startMmr = GetMmrValue.showInputDialog(null, null, 0, 0);
 			game.setStartMmr(startMmr);
+			
 	
 		}
 

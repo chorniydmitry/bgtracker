@@ -30,7 +30,6 @@ public class ResultsFrame extends JFrame {
 
 		this.setSize(new Dimension(width, height));
 		this.setTitle(title);
-		this.setAlwaysOnTop(true);
 		this.setLocation(10, 0);
 		this.setIconImage(C.APP_ICON);
 		

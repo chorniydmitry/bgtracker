@@ -1,11 +1,14 @@
 package chernyj.hsbgtracker.model;
 
+import java.awt.Image;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import chernyj.hsbgtracker.entity.Game;
@@ -17,8 +20,10 @@ import chernyj.hsbgtracker.service.HeroService;
 import chernyj.hsbgtracker.service.UserService;
 import chernyj.hsbgtracker.swing.GetMmrValue;
 import chernyj.hsbgtracker.swing.ResultsController;
+import chernyj.hsbgtracker.swing.ResultsFrame;
 import chernyj.hsbgtracker.swing.statistics.HTMLUpdater;
 import chernyj.hsbgtracker.utils.ApplicationConfiguration;
+import chernyj.hsbgtracker.utils.C;
 import chernyj.hsbgtracker.utils.DateConverter;
 import chernyj.hsbgtracker.utils.observers.LogFileObserver;
 
@@ -53,7 +58,12 @@ public class BattlegroundsAnalyser implements LogFileObserver {
 		saveGame(results);
 		
 		if(Boolean.parseBoolean(ApplicationConfiguration.getItem("show.updatemmrdialog")) && isCurrentGameTracking) {
-			currentMmr = GetMmrValue.showInputDialog(null, new ImageIcon(BattlegroundsAnalyser.class.getResource("/images/heroes/" + mainPlayer.getHero().getHsId() + ".jpg").getPath()), mainPlayer.getPlace(), 0);
+			
+			Icon icon = new ImageIcon(
+					new ImageIcon(ResultsFrame.class.getResource("/images/heroes/" + mainPlayer.getHero().getHsId() + ".jpg")).getImage()
+					.getScaledInstance(C.HERO_IMAGE_WIDTH, C.HERO_IMAGE_HEIGHT, Image.SCALE_DEFAULT));
+			
+			currentMmr = GetMmrValue.showInputDialog(null, icon, mainPlayer.getPlace(), 0);
 			htmlUpdater.setCurrentMmr(currentMmr);
 		}	
 		
